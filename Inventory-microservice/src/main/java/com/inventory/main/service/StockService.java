@@ -1,4 +1,4 @@
-package com.retail.main.service;
+package com.inventory.main.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.retail.main.exception.ResourceNotFoundException;
-import com.retail.main.model.Billing;
-import com.retail.main.model.Product;
-import com.retail.main.model.Stock;
-import com.retail.main.repository.StockRepository;
+import com.inventory.main.exception.ResourceNotFoundException;
+import com.inventory.main.model.Product;
+import com.inventory.main.model.Stock;
+import com.inventory.main.repository.StockRepository;
 
 @Service
 public class StockService {
@@ -32,9 +31,10 @@ public class StockService {
 			// If stock entry already exists, update the quantity by adding the new quantity
 			int newQuantity = existingStock.get().getQuantity() + stock.getQuantity();
 			
-			
+			if (newQuantity < 0) {
+				throw new IllegalArgumentException("Insufficient Stock for product:" + stock.getProduct().getTitle());
+			}
 			existingStock.get().setQuantity(newQuantity);
-			existingStock.get().setDateOfSupply(LocalDate.now());
 			return stockRepository.save(existingStock.get());
 		} else {
 			// If stock entry does not exist, create a new stock entry
@@ -73,21 +73,19 @@ public class StockService {
 	        stockRepository.save(stock);
 	    } 
 	}
-
-	public List<Stock> filterStocks(String product) {
+	
+	
+public List<Stock> filterStocks(String product) {
 		
 		List<Stock> allStocks = stockRepository.findAll();
 		
     List<Stock> filteredStock = allStocks.stream()
-	            .filter(stock -> (stock == null || stock.getProduct().getTitle().toLowerCase().startsWith(product.toLowerCase())))
+	            .filter(stock -> (stock == null || stock.getProduct().getTitle().toLowerCase().equals(product.toLowerCase())))
 	            .collect(Collectors.toList());
 	                
 	            
 
 	        return filteredStock;
 	}
-	
-	
-
 
 }

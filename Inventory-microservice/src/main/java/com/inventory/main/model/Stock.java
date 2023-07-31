@@ -1,7 +1,6 @@
-package com.retail.main.model;
+package com.inventory.main.model;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,9 +59,6 @@ public class Stock {
 		return "Stock [id=" + id + ", product=" + product + ", quantity=" + quantity + ", dateOfSupply=" + dateOfSupply
 				+ "]";
 	}
-
-	
-	}
 	
 	
-
+}

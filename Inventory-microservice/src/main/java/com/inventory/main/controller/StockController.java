@@ -1,4 +1,4 @@
-package com.retail.main.controller;
+package com.inventory.main.controller;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.main.model.Billing;
-import com.retail.main.model.Product;
-import com.retail.main.model.Stock;
-import com.retail.main.service.ProductService;
-import com.retail.main.service.StockService;
+import com.inventory.main.model.Customer;
+import com.inventory.main.model.Product;
+import com.inventory.main.model.Stock;
+import com.inventory.main.service.ProductService;
+import com.inventory.main.service.StockService;
 
 
 @RestController
-@RequestMapping("/inventory-service/stock")
+@RequestMapping("/stock")
 public class StockController {
 	
 	@Autowired	

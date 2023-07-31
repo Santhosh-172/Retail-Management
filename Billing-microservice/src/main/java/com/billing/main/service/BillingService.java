@@ -1,4 +1,4 @@
-package com.retail.main.service;
+package com.billing.main.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,10 +10,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.retail.main.model.Billing;
-import com.retail.main.model.Customer;
-import com.retail.main.model.Product;
-import com.retail.main.repository.BillingRepository;
+import com.billing.main.model.Billing;
+import com.billing.main.repository.BillingRepository;
+import com.inventory.main.model.Customer;
+import com.inventory.main.model.Product;
+import com.inventory.main.service.CustomerService;
 
 @Service
 public class BillingService {
@@ -102,20 +103,20 @@ public class BillingService {
         
         billing.setNetPrice(netPrice);
 	}
+	public List<Billing> filterBillings(String date, String customerName, Double netPrice) {
+        // Implement the filtering logic here based on the provided criteria
+        // You can use the billingRepository to fetch the billings and then filter them based on the criteria
+        List<Billing> allBillings = billingRepository.findAll(); // Fetch all billings from the database
 
-	 public List<Billing> filterBillings(String date, String customerName, Double netPrice) {
-	        // Implement the filtering logic here based on the provided criteria
-	        // You can use the billingRepository to fetch the billings and then filter them based on the criteria
-	        List<Billing> allBillings = billingRepository.findAll(); // Fetch all billings from the database
+        // Example filtering logic based on date, customer, and netPrice
+        List<Billing> filteredBillings = allBillings.stream()
+            .filter(billing -> (date == null || billing.getDate().equals(LocalDate.parse(date)))
+                && (customerName == null || billing.getCustomer().getName().toLowerCase().contains(customerName.toLowerCase()))
+                && (netPrice == null || billing.getNetPrice() <= netPrice))
+            .collect(Collectors.toList());
 
-	        // Example filtering logic based on date, customer, and netPrice
-	        List<Billing> filteredBillings = allBillings.stream()
-	            .filter(billing -> (date == null || billing.getDate().equals(LocalDate.parse(date)))
-	                && (customerName == null || billing.getCustomer().getName().toLowerCase().contains(customerName.toLowerCase()))
-	                && (netPrice == null || billing.getNetPrice() <= netPrice))
-	            .collect(Collectors.toList());
+        return filteredBillings;
+    }
 
-	        return filteredBillings;
-	    }
 	
 }

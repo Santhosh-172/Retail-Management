@@ -1,4 +1,4 @@
-package com.retail.main.controller;
+package com.inventory.main.controller;
 
 import java.util.List;
 
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.main.model.Customer;
-import com.retail.main.service.CustomerService;
+import com.inventory.main.model.Customer;
+import com.inventory.main.service.CustomerService;
 
 @RestController
-@RequestMapping("/inventory-service/customer")
+@RequestMapping("/customer")
 public class CustomerController {
 
 	@Autowired

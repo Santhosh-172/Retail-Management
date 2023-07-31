@@ -1,10 +1,11 @@
-package com.retail.main.controller;
+package com.inventory.main.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,16 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.main.exception.ResourceNotFoundException;
-import com.retail.main.model.Category;
-import com.retail.main.model.Product;
-import com.retail.main.model.Stock;
-import com.retail.main.repository.StockRepository;
-import com.retail.main.service.CategoryService;
-import com.retail.main.service.ProductService;
+import com.inventory.main.exception.ResourceNotFoundException;
+import com.inventory.main.model.Category;
+import com.inventory.main.model.Product;
+import com.inventory.main.service.CategoryService;
+import com.inventory.main.service.ProductService;
 
 @RestController
-@RequestMapping("/inventory-service/product")
+@RequestMapping("/product")
 public class ProductController {
 
 	@Autowired
@@ -31,10 +30,8 @@ public class ProductController {
 
 	@Autowired
 	private CategoryService categoryService;
-	
-	@Autowired
-	private StockRepository stockRepository;
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/add/{categoryId}")
 	public ResponseEntity<?> postProduct(@RequestBody Product product, @PathVariable("categoryId") int catId) {
 
@@ -113,17 +110,13 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.OK).body(newProduct);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable("id") int id) {
 		// Step 1: validate id
 		Product product = productService.getproduct(id);
-		Stock stock = stockRepository.findByProduct(product);
 		if (product == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid ID given");
-		}
-		
-		if( stock != null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( product.getTitle()+ " has Stock");
 		}
 
 		productService.deleteProduct(product);

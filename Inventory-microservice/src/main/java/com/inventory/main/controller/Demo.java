@@ -8,6 +8,6 @@ public class Demo {
 
 	@GetMapping("hello")
 	public String hello() {
-		return "Hello";
+		return "Hello from Inventory ii";
 	}
 }

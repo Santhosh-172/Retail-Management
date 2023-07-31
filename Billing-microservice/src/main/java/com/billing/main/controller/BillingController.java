@@ -1,4 +1,4 @@
-package com.retail.main.controller;
+package com.billing.main.controller;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.main.exception.ResourceNotFoundException;
-import com.retail.main.model.Billing;
-import com.retail.main.model.Customer;
-import com.retail.main.model.Product;
-import com.retail.main.service.BillingService;
-import com.retail.main.service.CustomerService;
-import com.retail.main.service.ProductService;
-import com.retail.main.service.StockService;
+import com.inventory.main.exception.ResourceNotFoundException;
+import com.billing.main.model.Billing;
+import com.billing.main.service.BillingService;
+import com.inventory.main.model.Customer;
+import com.inventory.main.model.Product;
+import com.inventory.main.service.CustomerService;
+import com.inventory.main.service.ProductService;
+import com.inventory.main.service.StockService;
 
 @RestController
-@RequestMapping("/billing-service/billing")
+@RequestMapping("/billing")
 public class BillingController {
 	
 	@Autowired
@@ -44,6 +44,7 @@ public class BillingController {
 		
 		Customer customer = customerService.getById(cusId);
 		
+		System.out.println(customer);
 		if(customer == null)
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body("Invalid customer ID given");
@@ -58,6 +59,7 @@ public class BillingController {
         // Fetch the products based on the list of product IDs
         List<Product> products = productService.getProductsByIds(productIds);
         
+        System.out.println(products);
         // Set the fetched products to the billing object
         billing.setProduct(products);
         
@@ -71,13 +73,15 @@ public class BillingController {
         billingService.updateCustomerLoyaltyPoints(customer, netPrice);
 		
         billingService.updateLoyaltyPlusNetPrice(customer,netPrice,billing);
-		billing =  billingService.insert(billing);
+        
+//        if (billing.getId() < 0) {
+            billing = billingService.insert(billing);
+//        }
 		
 		 for (int i = 0; i < products.size(); i++) {
 	            Product product = products.get(i);
 	            System.out.println(product);
 	            int quantityChange = -billing.getProductQuantities().get(i);
-	            System.out.println(quantityChange);
 	            try {
 					stockService.updateStockQuantity(product, quantityChange);
 				} catch (ResourceNotFoundException e) {
@@ -92,7 +96,6 @@ public class BillingController {
 	public List<Billing> getAll() {
 		return billingService.getAll();
 	}
-	
 	@GetMapping("/filter")
     public ResponseEntity<List<Billing>> filterBillings(
         @RequestParam(required = false) String date,

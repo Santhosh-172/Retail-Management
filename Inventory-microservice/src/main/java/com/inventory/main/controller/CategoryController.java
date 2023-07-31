@@ -1,4 +1,4 @@
-package com.retail.main.controller;
+package com.inventory.main.controller;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.retail.main.model.Category;
-import com.retail.main.service.CategoryService;
+import com.inventory.main.model.Category;
+import com.inventory.main.service.CategoryService;
 
 
 @RestController
-@RequestMapping("/inventory-service/category")
+@RequestMapping("/category")
 public class CategoryController {
 
 	@Autowired
